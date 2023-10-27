@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { checkPass } from 'API/checkPassword';
+import Generator  from '../components/LiveSymbols/RandomGenerator'
 
 const passwordInitialState = {
   userSimbols: '',
@@ -42,6 +43,7 @@ const passwordInitialState = {
   ],
   literalElements: [],
   symbolsWimdowsLink: null,
+  elementSize: {elementWidth: 0, elementHeight: 0},
 };
 
 const passwordSlice = createSlice({
@@ -57,6 +59,9 @@ const passwordSlice = createSlice({
             case 'push':
                 state[action.payload.name].push(action.payload.value);
                 break;
+            case 'replace':
+                state[action.payload.name].splice(Generator(state.literalElements.length), 1, action.payload.value);
+                break;    
             default:;
         }
     }

@@ -1,10 +1,13 @@
 .list {
     display: flex;
     flex-wrap: wrap;
-    column-gap: 10px;
-    row-gap: 10px;
-    margin: 20px;
+    /* column-gap: 3px;
+    row-gap: 3px; */
+    margin: 20px auto 0 auto;
     padding: 10px;
+
+    width: 80vw;
+    height: 200px;
 
     background-color: lightgray;
 }
@@ -27,9 +30,8 @@ p {
     padding: 2px;
 
     border-radius: 50%;
-    border: 1px solid gray;
+    border: 2px solid yellowgreen;
 
     background-color: lightslategray;
     
-    /* backdrop-filter: blur(5px); */
 }
