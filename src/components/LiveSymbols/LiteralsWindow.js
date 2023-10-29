@@ -1,15 +1,12 @@
 import { React, useRef, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { change } from 'passwordStore/PasswordSlice';
-
-import Generator  from './RandomGenerator'
+import { useSelector } from 'react-redux';
 
 // add css modules
 import l from './LiteralsWindow.module.css';
 
 const Window = ({ data, elementLink }) => {
 
-  const selectorsymbolsWindow = useSelector(state => state.password.elementSize);
+  // const selectorsymbolsWindow = useSelector(state => state.password.elementSize);
   const symbolsWindow = useRef(null);
   // const selectorElementSize = useSelector(state => state.password.elementSize);
   
@@ -25,7 +22,7 @@ const Window = ({ data, elementLink }) => {
     //   position: 'absolute'}}
     <div className={l.list} ref={symbolsWindow}>
         {
-          data.length !== 0 ? data.map(element => {return <div  className={l.symbol}><p key={element.id}>{element.symbol}</p></div> }) : ''
+          data.length !== 0 ? data.map(element => {return <div  className={element.activeKey === false ? l.symbol : l.activeSymbol}><p key={element.id}>{element.symbol}</p></div> }) : ''
         }
     </div>
   )

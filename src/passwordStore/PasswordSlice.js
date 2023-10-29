@@ -36,14 +36,22 @@ const passwordInitialState = {
     'x',
     'y',
     'z',
-    '@',
-    '_',
-    '*',
-    '#',
+    '0',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
   ],
   literalElements: [],
+  userSymbols: [],
   symbolsWimdowsLink: null,
   elementSize: {elementWidth: 0, elementHeight: 0},
+  randomUserSymbols: [],
 };
 
 const passwordSlice = createSlice({
@@ -56,12 +64,16 @@ const passwordSlice = createSlice({
             case 'change':
                 state[action.payload.name] = action.payload.value;
                 break;
+            case 'changeActive':
+                state[action.payload.name][action.payload.element].activeKey = action.payload.value;
+                break;
             case 'push':
                 state[action.payload.name].push(action.payload.value);
                 break;
             case 'replace':
                 state[action.payload.name].splice(Generator(state.literalElements.length), 1, action.payload.value);
-                break;    
+                break; 
+                   
             default:;
         }
     }

@@ -6,7 +6,7 @@
     margin: 20px auto 0 auto;
     padding: 10px;
 
-    width: 80vw;
+    width: 90%;
     height: 200px;
 
     background-color: lightgray;
@@ -34,4 +34,22 @@ p {
 
     background-color: lightslategray;
     
+}
+
+.activeSymbol {
+    position: relative;
+
+    display: flex;
+
+    align-items: first baseline;
+    justify-content: center;
+
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+
+    border-radius: 50%;
+    border: 2px solid yellowgreen;
+
+    background-color: rgb(209, 95, 212);
 }
