@@ -2,11 +2,17 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { change } from './passwordStore/PasswordSlice';
 import { nanoid } from 'nanoid';
+import { useClipboard } from 'use-clipboard-copy';
+
 // import Window  from './components/LiveSymbols/LiteralsWindow.js'
 import Generator  from './components/LiveSymbols/RandomGenerator';
 import LiteralsWindow from './components/LiveSymbols/LiteralsWindow';
-import { ReactComponent as IconSecurity } from './images/security-2-svgrepo-com.svg';
-import ComputingPass from './components/GeneratePass/UserPass';
+import Notiflix from 'notiflix';
+
+//icons import
+import { ReactComponent as IconSecurity } from './images/security-2-svgrepo-com.svg'; 
+import { ReactComponent as IconClipboard } from './images/clipboard-text-svgrepo-com.svg';
+
 import User from './components/GeneratePass/UserPass';
 
 import app from './App.module.css';
@@ -15,6 +21,7 @@ import app from './App.module.css';
 export const App = () => {
 
   const [userSymbols, setUserSymbols] = useState('');
+  const [mixSymbols, setMixSymbols] = useState([]);
   const [changeLiteral, setchangeLiteral] = useState('');
   const [passwordRange, setPasswordRange] = useState(8);
   const [userSymbolDrive, setUserSymbolDrive] = useState(false);
@@ -23,6 +30,7 @@ export const App = () => {
   const [specialUse, setSpecialUse] = useState(false);
   const [disableInput, setDisableInput] = useState(true);
   const [resultPassword, setResultPassword] = useState('');
+
   const dispatch = useDispatch();
 
   const selector = useSelector(state => state.password.userSymbols);
@@ -32,23 +40,37 @@ export const App = () => {
   const selectorPassword = useSelector(state => state.password.randomUserSymbols);
   const selectorElementLinks = useSelector(state => state.password.symbolsWimdowsLink);
   
+  const clipboard = useClipboard({
+    onSuccess() {
+      Notiflix.Notify.warning('Text was copied successfully!', {
+        position: 'center-top',
+        fontSize: '24px',
+      });
+    },
+    onError() {
+      Notiflix.Notify.warning('Failed to copy text!', {
+        position: 'center-top',
+        fontSize: '24px',
+      });
+    }
+  });
+
   useEffect(() => {
 
-  //  dispatch(change({name: 'literalElements', value: [], operation: 'change'}));
+
    dispatch(change({name: 'literalElements', value: {id: nanoid(), symbol: symbolsSelector[Generator(symbolsSelector.length)], activeKey: false}, operation: 'push'}));
   
-    // dispatch(change({name: 'symbolsWimdowsLink', value: synbolsWindow.current, operation: 'change'}));
 
   },[])
 
   useEffect(() => {
     
-    console.log(Math.ceil((selectorElementSize.elementWidth / 1.24 - 20) / 24))
+    // console.log(Math.ceil((selectorElementSize.elementWidth / 1.24 - 20) / 24))
     let interval = setTimeout(function() {
       if(selectorElementSize.elementWidth !== 0) dispatch(change({name: 'literalElements', value: {id: nanoid(), symbol: symbolsSelector[Generator(symbolsSelector.length)], activeKey: false}, operation: 'push'}));
     },  10);
     
-    if(symbElementsSelector.length >= (Math.ceil((selectorElementSize.elementWidth / 1.25 - 20) / 24)) * Math.ceil(((selectorElementSize.elementHeight / 1.25 - 20) / 24)))
+    if(symbElementsSelector.length >= (Math.ceil((selectorElementSize.elementWidth / 1.25 - 25) / 24)) * Math.ceil(((selectorElementSize.elementHeight / 1.25 - 25) / 24)))
     {
       clearTimeout(interval);
       setTimeout(function() {
@@ -61,11 +83,15 @@ export const App = () => {
   useEffect(() => {
 
     if(selector.length !== 0) dispatch(change({name: 'randomUserSymbols', value: User(selector), operation: 'change'}));  
-    
    
-    // ComputingPass(userSymbols, userSymbolDrive, autoDrive, mixDrive);
    
   },[selector])
+
+  useEffect(() => {
+
+    dispatch(change({name: 'randomUserSymbols', value: mixSymbols, operation: 'change'}));  
+   
+  },[mixSymbols])
 
   const rangeChange = (evt) => {
     setPasswordRange(evt.target.value);
@@ -121,10 +147,6 @@ export const App = () => {
   const changeStore = evt => {
 
     evt.preventDefault();
-    
-    if(userSymbolDrive) {
-      dispatch(change({name: 'userSymbols', value: userSymbols.split(''), operation: 'change'}));
-    }
 
     if(autoDrive) {
 
@@ -133,23 +155,60 @@ export const App = () => {
         
         for(let i = 0; i < passwordRange; i += 1) {
           let l = Generator(symbElementsSelector.length);
-          console.log(l);
+          
           if(Generator(2) === 0){  
+
+            // hilight seleted symbol
             dispatch(change({name: 'literalElements', element: l, value: true, operation: 'changeActive'}));
             autoSymbols.push(symbElementsSelector[l].symbol.toUpperCase())
           } else {
+
+            // hilight seleted symbol
             dispatch(change({name: 'literalElements', element: l, value: true, operation: 'changeActive'}));
             autoSymbols.push(symbElementsSelector[l].symbol);
           };
           
         } 
-        console.log(symbElementsSelector);
+        
         dispatch(change({name: 'randomUserSymbols', value: autoSymbols, operation: 'change'}))
-        // autoSymbols = [];
+       
       }
     }
 
     if(mixDrive) {
+      
+      let toArray = userSymbols.split('')
+      let l = 0;
+      userSymbols.split('').map((value, index) => 
+         
+        {if(value === ' ') {
+          l = Generator(symbElementsSelector.length)
+
+          if(Generator(2) === 0){  
+            toArray.splice(index, 1, symbElementsSelector[l].symbol);
+          } else {
+            toArray.splice(index, 1, symbElementsSelector[l].symbol.toUpperCase());
+          }
+
+          // hilight seleted symbol
+          dispatch(change({name: 'literalElements', element: l, value: true, operation: 'changeActive'}));
+        }}
+      )  
+      
+      // fill missing elements 
+      while(toArray.length < passwordRange) {
+        l = Generator(symbElementsSelector.length)
+
+        if(Generator(2) === 0){  
+          toArray.splice(toArray.length + 1, 0, symbElementsSelector[l].symbol);
+        } else {
+          toArray.splice(toArray.length + 1, 0, symbElementsSelector[l].symbol.toUpperCase());
+        }
+        // hilight seleted symbol
+        dispatch(change({name: 'literalElements', element: l, value: true, operation: 'changeActive'}));
+      }
+     
+      setMixSymbols(toArray);
       
     }
 
@@ -163,6 +222,10 @@ export const App = () => {
       
   };
 
+  const clickButton = (evt) => {
+    evt.target.style.boxShadow  = 'inset 0px 0px 4px 5px #d1d1d1';
+  };
+
   return (
     <section className={app.section}>
      
@@ -174,38 +237,41 @@ export const App = () => {
           <IconSecurity width="55px" height="55px"/>
           <h1>Password generator</h1>
         </div>
-        
-        <label className={app.userSymbols}> Enter your password symbols
-           <input type="text" onChange={changeLocalState} value={userSymbols} name='userSymbols' disabled={disableInput} required/>
+
+        <p className={app.instruction}>Your symbols separated by space in any combination. "Space" - automatic simbols.</p>
+
+        <label className={app.userSymbols} htmlFor="text"> Enter required password symbols
+          <input type="text" onChange={changeLocalState} id="text" value={userSymbols} name='userSymbols' disabled={disableInput} required/>
         </label>
 
         <div className={app.settings}>
 
-          <label> only user symbol
-            <input type="radio" name="userSymbol" onChange={radioDrive} checked={userSymbolDrive}></input>
+          <label htmlFor="combo"> combo
+            <input type="radio" name="mix" id="combo"  onChange={radioDrive} checked={mixDrive}></input>
           </label>
 
-          <label> mix
-            <input type="radio" name="mix"  onChange={radioDrive} checked={mixDrive}></input>
-          </label>
-
-          <label> auto
-            <input type="radio" name="auto"  onChange={radioDrive} checked={autoDrive}></input>
+          <label htmlFor="auto"> auto
+            <input type="radio" name="auto" id="auto" onChange={radioDrive} checked={autoDrive}></input>
           </label> 
 
-          <label> 
-            <input type="range" min="8" max="16" step="1" onChange={rangeChange} value={passwordRange}></input>
+          <label htmlFor="range"> 
+            <input type="range" min="8" max="16" step="1" id="range" onChange={rangeChange} value={passwordRange}></input>
             {` ${passwordRange} symbols`}
           </label>
         </div>
         
-        <button type="submit">Generate password</button>
+        <button type="submit" >Generate password</button>
         
         <label>
-          <textarea value={selectorPassword.join('')}></textarea>
+          <textarea ref={clipboard.target} value={selectorPassword.join('')}></textarea>
         </label>
+
+        <button className={app.clipboard} onClick={clipboard.copy} type="button" >
+          <IconClipboard className={app.clipboard} width="35" height="35"/>
+        </button>
         
       </form>
+      <h2 style={{fontSize: '11px', color: '#757575', width: '20%', margin: '0 auto'}}>by Dmitry Shevchenko 2023</h2>
     </section>
   );
 };
