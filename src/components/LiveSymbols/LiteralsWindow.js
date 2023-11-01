@@ -20,7 +20,7 @@ const Window = ({ data, elementLink }) => {
     // style={{left: Generator(selectorElementSize.elementWidth),
     //   top: Generator(selectorElementSize.elementHeight),
     //   position: 'absolute'}}
-    <div className={l.list} ref={symbolsWindow}>
+    <div className={l.list} ref={symbolsWindow}> 
         {
           data.length !== 0 ? data.map(element => {return <div  className={element.activeKey === false ? l.symbol : l.activeSymbol}><p key={element.id}>{element.symbol}</p></div> }) : ''
         }

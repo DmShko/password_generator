@@ -52,6 +52,7 @@ const passwordInitialState = {
   symbolsWimdowsLink: null,
   elementSize: {elementWidth: 0, elementHeight: 0},
   randomUserSymbols: [],
+  securityLevel: '',
 };
 
 const passwordSlice = createSlice({
@@ -66,6 +67,9 @@ const passwordSlice = createSlice({
                 break;
             case 'changeActive':
                 state[action.payload.name][action.payload.element].activeKey = action.payload.value;
+                break;
+            case 'changeAnima':
+                state[action.payload.name][action.payload.element].animaKey = action.payload.value;
                 break;
             case 'push':
                 state[action.payload.name].push(action.payload.value);

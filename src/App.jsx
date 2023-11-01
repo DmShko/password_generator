@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { change } from './passwordStore/PasswordSlice';
 import { nanoid } from 'nanoid';
 import { useClipboard } from 'use-clipboard-copy';
+import { SecurityControl } from './components/SecurityControl/SecurityControl'
 
 // import Window  from './components/LiveSymbols/LiteralsWindow.js'
 import Generator  from './components/LiveSymbols/RandomGenerator';
@@ -29,6 +30,7 @@ export const App = () => {
   const [mixDrive, setMixDrive] = useState(false);
   const [specialUse, setSpecialUse] = useState(false);
   const [disableInput, setDisableInput] = useState(true);
+  const [disableButton, setDisableButton] = useState(true);
   const [resultPassword, setResultPassword] = useState('');
 
   const dispatch = useDispatch();
@@ -39,6 +41,7 @@ export const App = () => {
   const selectorElementSize = useSelector(state => state.password.elementSize);
   const selectorPassword = useSelector(state => state.password.randomUserSymbols);
   const selectorElementLinks = useSelector(state => state.password.symbolsWimdowsLink);
+  const selectorSecurityLevel = useSelector(state => state.password.securityLevel);
   
   const clipboard = useClipboard({
     onSuccess() {
@@ -58,7 +61,7 @@ export const App = () => {
   useEffect(() => {
 
 
-   dispatch(change({name: 'literalElements', value: {id: nanoid(), symbol: symbolsSelector[Generator(symbolsSelector.length)], activeKey: false}, operation: 'push'}));
+   dispatch(change({name: 'literalElements', value: {id: nanoid(), symbol: symbolsSelector[Generator(symbolsSelector.length)], activeKey: false, animaKey: false}, operation: 'push'}));
   
 
   },[])
@@ -66,18 +69,27 @@ export const App = () => {
   useEffect(() => {
     
     // console.log(Math.ceil((selectorElementSize.elementWidth / 1.24 - 20) / 24))
+    let a = Generator(symbolsSelector.length);
+
     let interval = setTimeout(function() {
-      if(selectorElementSize.elementWidth !== 0) dispatch(change({name: 'literalElements', value: {id: nanoid(), symbol: symbolsSelector[Generator(symbolsSelector.length)], activeKey: false}, operation: 'push'}));
+      if(selectorElementSize.elementWidth !== 0) dispatch(change({name: 'literalElements', value: {id: nanoid(), symbol: symbolsSelector[a], activeKey: false, animaKey: false}, operation: 'push'}));
+      setDisableButton(true);
     },  10);
     
     if(symbElementsSelector.length >= (Math.ceil((selectorElementSize.elementWidth / 1.25 - 25) / 24)) * Math.ceil(((selectorElementSize.elementHeight / 1.25 - 25) / 24)))
     {
+      setDisableButton(false);
       clearTimeout(interval);
       setTimeout(function() {
-        dispatch(change({name: 'literalElements', value: {symbol: symbolsSelector[Generator(symbolsSelector.length)], activeKey: false}, operation: 'replace'}));
+        dispatch(change({name: 'literalElements', value: {symbol: symbolsSelector[a], activeKey: false, animaKey: false}, operation: 'replace'}));
+        dispatch(change({name: 'literalElements', element: a, value: true, operation: 'changeAnima'}));
       },  200);
     } 
     
+    // check password strong
+    dispatch(change({name: 'securityLevel', value: SecurityControl(selectorPassword), operation: 'change'}));
+
+        
   },[symbElementsSelector, selectorElementLinks])
 
   useEffect(() => {
@@ -222,31 +234,31 @@ export const App = () => {
       
   };
 
-  const clickButton = (evt) => {
-    evt.target.style.boxShadow  = 'inset 0px 0px 4px 5px #d1d1d1';
-  };
-
   return (
     <section className={app.section}>
      
       <form onSubmit={changeStore} action="">
         
-        {symbElementsSelector.length !== 0 ? <LiteralsWindow  data={symbElementsSelector} elementLink={getElementLink}/> : ''}
+        {symbElementsSelector.length !== 0 ? <LiteralsWindow  data={symbElementsSelector} elementLink={getElementLink} /> : ''}
         
         <div className={app.title}>
           <IconSecurity width="55px" height="55px"/>
           <h1>Password generator</h1>
         </div>
 
-        <p className={app.instruction}>Your symbols separated by space in any combination. "Space" - automatic simbols.</p>
+        
+        <fieldset className={app.settingsTwo}>
+          <legend className={app.instruction}>Your symbols separated by space in any combination. "Space" - automatic simbols.</legend>
+          <label className={app.userSymbols} htmlFor="text"> Enter required password symbols
+            <input type="text" onChange={changeLocalState} id="text" value={userSymbols} name='userSymbols' disabled={disableInput} required/>
+          </label>
+        </fieldset>
+                
+        <fieldset className={app.settings}>
 
-        <label className={app.userSymbols} htmlFor="text"> Enter required password symbols
-          <input type="text" onChange={changeLocalState} id="text" value={userSymbols} name='userSymbols' disabled={disableInput} required/>
-        </label>
+          <legend className={app.instructionTwo}>A strong password must contain capital letters, numbers, and special characters. Use 'combo' mode for it.</legend>
 
-        <div className={app.settings}>
-
-          <label htmlFor="combo"> combo
+          <label htmlFor="combo"> combo 
             <input type="radio" name="mix" id="combo"  onChange={radioDrive} checked={mixDrive}></input>
           </label>
 
@@ -258,12 +270,13 @@ export const App = () => {
             <input type="range" min="8" max="16" step="1" id="range" onChange={rangeChange} value={passwordRange}></input>
             {` ${passwordRange} symbols`}
           </label>
-        </div>
+
+        </fieldset>
         
-        <button type="submit" >Generate password</button>
+        <button className={disableButton ? app.disButton : app.activButton}type="submit" disabled={disableButton}>Generate password</button>
         
         <label>
-          <textarea ref={clipboard.target} value={selectorPassword.join('')}></textarea>
+          <textarea  className={selectorSecurityLevel === 'green' ? app.green : app.orange} ref={clipboard.target} value={selectorPassword.join('')}></textarea>
         </label>
 
         <button className={app.clipboard} onClick={clipboard.copy} type="button" >
@@ -271,7 +284,7 @@ export const App = () => {
         </button>
         
       </form>
-      <h2 style={{fontSize: '11px', color: '#757575', width: '20%', margin: '0 auto'}}>by Dmitry Shevchenko 2023</h2>
+        <h2 style={{fontSize: '11px', color: '#757575', width: '150px', margin: '0 auto'}}>by Dmitry Shevchenko 2023</h2>
     </section>
   );
 };

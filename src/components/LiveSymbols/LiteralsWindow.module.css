@@ -1,12 +1,10 @@
 .list {
     display: flex;
     flex-wrap: wrap;
-    /* column-gap: 3px;
-    row-gap: 3px; */
-    /* margin: 20px auto 0 auto; */
+  
     padding: 10px;
 
-    /* width: 90%; */
+   
     height: 200px;
 
     background-color: lightgray;
@@ -15,7 +13,7 @@
 p {
     margin: 0;
     color: white;
-    font-weight: bolder;
+    font-weight: bold;
 }
 
 .symbol {
@@ -30,26 +28,33 @@ p {
     padding: 2px;
 
     border-radius: 50%;
-    border: 2px solid yellowgreen;
+    border: 3px solid yellowgreen;
 
-    background-color: lightslategray;
+    background-color: rgba(119,136,153,1);
 
-    
-    
-}
-
-.glare {
-    animation: 1s linear 0s infinite alternate glare;
 }
 
 @keyframes glare {
-    from {
-        background: linear-gradient(137deg, rgba(68,100,99,1) 3%, rgba(252,252,252,1) 57%, rgba(68,100,99,0.8071603641456583) 70%);
+    10% {
+        background: linear-gradient(137deg, rgb(209, 95, 212) 3%, rgb(209, 95, 212) 70%);
     }
-    to {
-        background: linear-gradient(137deg, rgba(255,255,255,0) 3%, rgba(252,252,252,1) 57%, rgba(142,182,106,0.7));
+    25% {
+        background: linear-gradient(137deg, rgb(209, 95, 212) 3%, rgba(255,255,255,1) 23%, rgb(209, 95, 212) 70%);
+              
     }
-  }
+
+    50% {
+        background: linear-gradient(137deg, rgb(209, 95, 212) 3%, rgba(255,255,255,1) 48%, rgb(209, 95, 212) 70%); 
+    }
+
+    75% {
+        background: linear-gradient(137deg, rgb(209, 95, 212) 3%, rgba(255,255,255,1) 62%, rgb(209, 95, 212) 70%);
+    }
+
+    100% {
+        background: linear-gradient(137deg, rgba(119,136,153,1) 3%, rgba(119,136,153,1) 70%);
+    }
+}
 
 .activeSymbol {
     position: relative;
@@ -64,7 +69,8 @@ p {
     padding: 2px;
 
     border-radius: 50%;
-    border: 2px solid yellowgreen;
+    border: 3px solid yellowgreen;
 
     background-color: rgb(209, 95, 212);
+    animation: 500ms linear  alternate glare;
 }
