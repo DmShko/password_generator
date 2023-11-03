@@ -59,6 +59,7 @@ export const App = () => {
     }
   });
 
+  //first start
   useEffect(() => {
 
    dispatch(change({name: 'literalElements', value: {id: nanoid(), symbol: symbolsSelector[Generator(symbolsSelector.length)], activeKey: false, animaKey: false}, operation: 'push'}));
@@ -70,11 +71,13 @@ export const App = () => {
     // console.log(Math.ceil((selectorElementSize.elementWidth / 1.24 - 20) / 24))
     let a = Generator(symbolsSelector.length);
 
+    // first start fill
     let interval = setTimeout(function() {
       if(selectorElementSize.elementWidth !== 0) dispatch(change({name: 'literalElements', value: {id: nanoid(), symbol: symbolsSelector[a], activeKey: false, animaKey: false}, operation: 'push'}));
       setDisableButton(true);
     },  10);
     
+    //regular change symbol
     if(symbElementsSelector.length >= (((selectorElementSize.elementWidth / 1.25 - 50) / 24) * (selectorElementSize.elementHeight / 1.25 - 50) / 24))
     {
       setDisableButton(false);
@@ -94,7 +97,7 @@ export const App = () => {
   useEffect(() => {
     
     // clear 'literalElements'
-  
+    // if window size change unfill symbol area
     dispatch(change({name: 'literalElements', value: [], operation: 'change'}));
     dispatch(change({name: 'literalElements', value: {id: nanoid(), symbol: symbolsSelector[Generator(symbolsSelector.length)], activeKey: false, animaKey: false}, operation: 'push'}));
    // eslint-disable-next-line
@@ -102,14 +105,14 @@ export const App = () => {
 
 
   useEffect(() => {
-
+    // create random symbol from user symbol
     if(selector.length !== 0) dispatch(change({name: 'randomUserSymbols', value: User(selector), operation: 'change'}));  
    
    // eslint-disable-next-line
   },[selector])
 
   useEffect(() => {
-
+    // create random symbol from user symbol + random generated (mix)
     dispatch(change({name: 'randomUserSymbols', value: mixSymbols, operation: 'change'}));  
     // eslint-disable-next-line
   },[mixSymbols])
