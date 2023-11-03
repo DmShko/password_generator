@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/password_generator/static/css/main.fed376b3.css",
-    "main.js": "/password_generator/static/js/main.776af637.js",
+    "main.js": "/password_generator/static/js/main.28c39009.js",
     "static/media/clipboard-text-svgrepo-com.svg": "/password_generator/static/media/clipboard-text-svgrepo-com.51afcd13c775183666b88a5959ddf151.svg",
     "index.html": "/password_generator/index.html",
     "static/media/security-2-svgrepo-com.svg": "/password_generator/static/media/security-2-svgrepo-com.aaec87bd202a7d44b1e29f1250d40bfc.svg",
     "main.fed376b3.css.map": "/password_generator/static/css/main.fed376b3.css.map",
-    "main.776af637.js.map": "/password_generator/static/js/main.776af637.js.map"
+    "main.28c39009.js.map": "/password_generator/static/js/main.28c39009.js.map"
   },
   "entrypoints": [
     "static/css/main.fed376b3.css",
-    "static/js/main.776af637.js"
+    "static/js/main.28c39009.js"
   ]
 }
