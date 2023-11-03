@@ -1,37 +1,23 @@
-import { React, useRef, useEffect, createRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { React, useEffect, createRef } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { change } from '../../passwordStore/PasswordSlice';
 
 // add css modules
 import l from './LiteralsWindow.module.css';
 
-// const useRefDimensions = (ref) => {
- 
-//   return dimensions
-// }
+const Window = ({ data }) => {
 
-const Window = ({ data, elementLink }) => {
-
-  // const selectorsymbolsWindow = useSelector(state => state.password.elementSize);
-  // const symbolsWindow = useRef(null);
-  // const selectorElementSize = useSelector(state => state.password.elementSize);
-  // const [dim, setDimensions] = useState({ width: 1, height: 2 })
   const symbolsWindow = createRef()
+  const dispatch = useDispatch();
+  // const toLink = () => elementLink(symbolsWindow);
 
-  // useEffect(() => {
 
-  //   // if (window.offsetWidth) {
-  //     const { current } = symbolsWindow
-  //     const boundingRect = current.getBoundingClientRect()
-  //     const { width, height } = boundingRect
-  //     console.log(window.offsetWidth)
-  //     setDimensions({ width: Math.round(width), height: Math.round(height) })
-  //   // }
-  // }, [window.offsetWidth]);
-   
   useEffect(() => {
     
-    elementLink(symbolsWindow);
-   
+    // add element size (main symbol window)
+    dispatch(change({name: 'elementSize', value: {elementWidth: symbolsWindow.current.offsetWidth, elementHeight: symbolsWindow.current.offsetHeight}, operation: 'change'}));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[window.innerWidth])
 
   return (

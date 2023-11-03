@@ -23,15 +23,15 @@ export const App = () => {
 
   const [userSymbols, setUserSymbols] = useState('');
   const [mixSymbols, setMixSymbols] = useState([]);
-  const [changeLiteral, setchangeLiteral] = useState('');
+ 
   const [passwordRange, setPasswordRange] = useState(8);
   const [userSymbolDrive, setUserSymbolDrive] = useState(false);
   const [autoDrive, setAutoDrive] = useState(true);
   const [mixDrive, setMixDrive] = useState(false);
-  const [specialUse, setSpecialUse] = useState(false);
+
   const [disableInput, setDisableInput] = useState(true);
   const [disableButton, setDisableButton] = useState(true);
-  const [resultPassword, setResultPassword] = useState('');
+
 
   const dispatch = useDispatch();
 
@@ -61,7 +61,7 @@ export const App = () => {
   useEffect(() => {
 
    dispatch(change({name: 'literalElements', value: {id: nanoid(), symbol: symbolsSelector[Generator(symbolsSelector.length)], activeKey: false, animaKey: false}, operation: 'push'}));
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   useEffect(() => {
@@ -87,7 +87,7 @@ export const App = () => {
     // check password strong
     dispatch(change({name: 'securityLevel', value: SecurityControl(selectorPassword), operation: 'change'}));
 
-        
+    // eslint-disable-next-line  
   },[symbElementsSelector, selectorElementLinks])
 
   useEffect(() => {
@@ -96,7 +96,7 @@ export const App = () => {
   
     dispatch(change({name: 'literalElements', value: [], operation: 'change'}));
     dispatch(change({name: 'literalElements', value: {id: nanoid(), symbol: symbolsSelector[Generator(symbolsSelector.length)], activeKey: false, animaKey: false}, operation: 'push'}));
-   
+   // eslint-disable-next-line
   },[selectorElementSize])
 
 
@@ -104,13 +104,13 @@ export const App = () => {
 
     if(selector.length !== 0) dispatch(change({name: 'randomUserSymbols', value: User(selector), operation: 'change'}));  
    
-   
+   // eslint-disable-next-line
   },[selector])
 
   useEffect(() => {
 
     dispatch(change({name: 'randomUserSymbols', value: mixSymbols, operation: 'change'}));  
-   
+    // eslint-disable-next-line
   },[mixSymbols])
 
   const rangeChange = (evt) => {
@@ -154,12 +154,6 @@ export const App = () => {
       }
   };
 
-  const getElementLink = value => {
-    
-    // add element size (main symbol window)
-    dispatch(change({name: 'elementSize', value: {elementWidth: value.current.offsetWidth, elementHeight: value.current.offsetHeight}, operation: 'change'}));
-    
-  } 
   
   const clearInputs = () => {
     setUserSymbols('');
@@ -200,6 +194,7 @@ export const App = () => {
       
       let toArray = userSymbols.split('')
       let l = 0;
+      // eslint-disable-next-line
       userSymbols.split('').map((value, index) => 
          
         {if(value === ' ') {
@@ -214,6 +209,7 @@ export const App = () => {
           // hilight seleted symbol
           dispatch(change({name: 'literalElements', element: l, value: true, operation: 'changeActive'}));
         }}
+        
       )  
       
       // fill missing elements 
@@ -248,7 +244,7 @@ export const App = () => {
      
       <form onSubmit={changeStore} >
         
-        {symbElementsSelector.length !== 0 ? <LiteralsWindow  data={symbElementsSelector} elementLink={getElementLink} /> : ''}
+        {symbElementsSelector.length !== 0 ? <LiteralsWindow  data={symbElementsSelector}/> : ''}
         
         <div className={app.title}>
           <IconSecurity width="55px" height="55px"/>
