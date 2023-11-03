@@ -1,6 +1,6 @@
 .section {
-   max-width: 878px;
-   width: 80vw;
+   max-width: 768px;
+   /* width: 80vw; */
    padding: 10px;
 
    border: 1px solid gray;
@@ -13,7 +13,6 @@
    display: flex; 
    flex-direction: row;
    align-items: center;
-
 }
 
 form {
@@ -54,6 +53,13 @@ form {
   
    margin: 0 0 20px 30%;
 
+}
+
+@media only screen and (min-width: 320px) and (max-width: 600px) {
+   .settingsTwo {
+      
+       margin: 0 0 20px 0;
+   }
 }
 
 .userSymbols {

@@ -1,20 +1,38 @@
-import { React, useRef, useEffect } from 'react';
+import { React, useRef, useEffect, createRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 // add css modules
 import l from './LiteralsWindow.module.css';
 
+// const useRefDimensions = (ref) => {
+ 
+//   return dimensions
+// }
+
 const Window = ({ data, elementLink }) => {
 
   // const selectorsymbolsWindow = useSelector(state => state.password.elementSize);
-  const symbolsWindow = useRef(null);
+  // const symbolsWindow = useRef(null);
   // const selectorElementSize = useSelector(state => state.password.elementSize);
-  
-  useEffect(() => {
+  // const [dim, setDimensions] = useState({ width: 1, height: 2 })
+  const symbolsWindow = createRef()
 
+  // useEffect(() => {
+
+  //   // if (window.offsetWidth) {
+  //     const { current } = symbolsWindow
+  //     const boundingRect = current.getBoundingClientRect()
+  //     const { width, height } = boundingRect
+  //     console.log(window.offsetWidth)
+  //     setDimensions({ width: Math.round(width), height: Math.round(height) })
+  //   // }
+  // }, [window.offsetWidth]);
+   
+  useEffect(() => {
+    
     elementLink(symbolsWindow);
    
-  },[window.innerWidth, window.innerHeight])
+  },[window.innerWidth])
 
   return (
     // style={{left: Generator(selectorElementSize.elementWidth),

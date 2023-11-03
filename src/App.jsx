@@ -60,14 +60,12 @@ export const App = () => {
 
   useEffect(() => {
 
-
    dispatch(change({name: 'literalElements', value: {id: nanoid(), symbol: symbolsSelector[Generator(symbolsSelector.length)], activeKey: false, animaKey: false}, operation: 'push'}));
-  
 
   },[])
 
   useEffect(() => {
-    
+   
     // console.log(Math.ceil((selectorElementSize.elementWidth / 1.24 - 20) / 24))
     let a = Generator(symbolsSelector.length);
 
@@ -76,7 +74,7 @@ export const App = () => {
       setDisableButton(true);
     },  10);
     
-    if(symbElementsSelector.length >= (Math.ceil((selectorElementSize.elementWidth / 1.25 - 25) / 24)) * Math.ceil(((selectorElementSize.elementHeight / 1.25 - 25) / 24)))
+    if(symbElementsSelector.length >= (((selectorElementSize.elementWidth / 1.25 - 50) / 24) * (selectorElementSize.elementHeight / 1.25 - 50) / 24))
     {
       setDisableButton(false);
       clearTimeout(interval);
@@ -91,6 +89,16 @@ export const App = () => {
 
         
   },[symbElementsSelector, selectorElementLinks])
+
+  useEffect(() => {
+    
+    // clear 'literalElements'
+  
+    dispatch(change({name: 'literalElements', value: [], operation: 'change'}));
+    dispatch(change({name: 'literalElements', value: {id: nanoid(), symbol: symbolsSelector[Generator(symbolsSelector.length)], activeKey: false, animaKey: false}, operation: 'push'}));
+   
+  },[selectorElementSize])
+
 
   useEffect(() => {
 
@@ -150,6 +158,7 @@ export const App = () => {
     
     // add element size (main symbol window)
     dispatch(change({name: 'elementSize', value: {elementWidth: value.current.offsetWidth, elementHeight: value.current.offsetHeight}, operation: 'change'}));
+    
   } 
   
   const clearInputs = () => {
@@ -237,7 +246,7 @@ export const App = () => {
   return (
     <section className={app.section}>
      
-      <form onSubmit={changeStore} action="">
+      <form onSubmit={changeStore} >
         
         {symbElementsSelector.length !== 0 ? <LiteralsWindow  data={symbElementsSelector} elementLink={getElementLink} /> : ''}
         
@@ -250,7 +259,7 @@ export const App = () => {
         <fieldset className={app.settingsTwo}>
           <legend className={app.instruction}>Your symbols separated by space in any combination. "Space" - automatic simbols.</legend>
           <label className={app.userSymbols} htmlFor="text"> Enter required password symbols
-            <input type="text" onChange={changeLocalState} id="text" value={userSymbols} name='userSymbols' disabled={disableInput} required/>
+            <input type="text" onChange={changeLocalState} id="text" value={userSymbols} name='userSymbols' maxLength={passwordRange} disabled={disableInput} required/>
           </label>
         </fieldset>
                 
@@ -259,7 +268,7 @@ export const App = () => {
           <legend className={app.instructionTwo}>A strong password must contain capital letters, numbers, and special characters. Use 'combo' mode for it.</legend>
 
           <label htmlFor="combo"> combo 
-            <input type="radio" name="mix" id="combo"  onChange={radioDrive} checked={mixDrive}></input>
+            <input type="radio" name="mix" id="combo" onChange={radioDrive} checked={mixDrive}></input>
           </label>
 
           <label htmlFor="auto"> auto
@@ -276,7 +285,9 @@ export const App = () => {
         <button className={disableButton ? app.disButton : app.activButton}type="submit" disabled={disableButton}>Generate password</button>
         
         <label>
-          <textarea  className={selectorSecurityLevel === 'green' ? app.green : app.orange} ref={clipboard.target} value={selectorPassword.join('')}></textarea>
+          <textarea  className={selectorSecurityLevel === 'green' ? app.green : app.orange} ref={clipboard.target} defaultValue={selectorPassword.join('')}>
+          
+          </textarea>
         </label>
 
         <button className={app.clipboard} onClick={clipboard.copy} type="button" >
