@@ -13,6 +13,7 @@ import Notiflix from 'notiflix';
 //icons import
 import { ReactComponent as IconSecurity } from './images/security-2-svgrepo-com.svg'; 
 import { ReactComponent as IconClipboard } from './images/clipboard-text-svgrepo-com.svg';
+import { ReactComponent as IconGitHub } from './images/github-svgrepo-com.svg';
 
 import User from './components/GeneratePass/UserPass';
 
@@ -286,12 +287,21 @@ export const App = () => {
           </textarea>
         </label>
 
-        <button className={app.clipboard} onClick={clipboard.copy} type="button" >
-          <IconClipboard className={app.clipboard} width="35" height="35"/>
-        </button>
+        <div className={app.buttonsSection}>
+          <button className={app.clipboard} onClick={clipboard.copy} type="button" >
+            <IconClipboard className={app.clipboard} width="35" height="35"/>
+          </button>
+
+          <button className={app.clipboard} onClick={() => window.open('https://github.com/DmShko/password_generator')} type="button" >
+            <IconGitHub className={app.clipboard} width="35" height="35"/>
+          </button>
+        </div>
+        
         
       </form>
+
         <h2 style={{fontSize: '11px', color: '#757575', width: '150px', margin: '0 auto'}}>by Dmitry Shevchenko 2023</h2>
+       
     </section>
   );
 };
