@@ -66,12 +66,10 @@ const passwordSlice = createSlice({
                 state[action.payload.name] = action.payload.value;
                 break;
             case 'changeActive':
-                if(state[action.payload.name]){
-                   state[action.payload.name][action.payload.element].activeKey = action.payload.value;
-                }
-               
+                state[action.payload.name][action.payload.element].activeKey = action.payload.value;
                 break;
             case 'changeAnima':
+              if(state[action.payload.name].length !== 0)
                 state[action.payload.name][action.payload.element].animaKey = action.payload.value;
                 break;
             case 'push':

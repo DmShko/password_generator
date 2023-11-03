@@ -80,7 +80,7 @@ export const App = () => {
       clearTimeout(interval);
       setTimeout(function() {
         dispatch(change({name: 'literalElements', value: {symbol: symbolsSelector[a], activeKey: false, animaKey: false}, operation: 'replace'}));
-        dispatch(change({name: 'literalElements', element: a, value: true, operation: 'changeAnima'}));
+        // dispatch(change({name: 'literalElements', element: a, value: true, operation: 'changeAnima'}));
       },  200);
     } 
     
